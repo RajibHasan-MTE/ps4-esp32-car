@@ -1,36 +1,28 @@
-ESP32 PS4 RC Car 🚗🎮
+# ESP32 PS4 RC Car 🚗🎮
 
-Control an RC Car with an ESP32 using a PS4 (DualShock 4) controller over Bluetooth (BLE). This project is beginner-friendly and explains everything step-by-step, from library setup to pairing and coding.
+Control an **RC Car with an ESP32** using a **PS4 (DualShock 4) controller** over Bluetooth (BLE).  
+This project is beginner-friendly and explains everything step-by-step, from library setup to pairing and coding.
 
-🔧 Hardware Requirements
+---
 
-ESP32 Development Board (WROOM-32 or similar)
+## 🔧 Hardware Requirements
+- ESP32 Development Board (WROOM-32 or similar)  
+- L298N / L293D motor driver module  
+- 2x DC motors with wheels (or a 4-wheel chassis)  
+- PS4 (DualShock 4) wireless controller  
+- Power supply (Li-ion battery / 9V battery pack)  
+- Jumper wires  
 
-L298N / L293D motor driver module
+---
 
-2x DC motors with wheels (or a 4-wheel chassis)
+## ⚡ Wiring (ESP32 → Motor Driver)
 
-PS4 (DualShock 4) wireless controller
-
-Power supply (Li-ion battery / 9V battery pack)
-
-Jumper wires
-
-⚡ Wiring (ESP32 → Motor Driver)
+```cpp
 #define IN1 18   // Motor A forward
 #define IN2 19   // Motor A backward
 #define IN3 22   // Motor B forward
 #define IN4 23   // Motor B backward
 
-ESP32 Pin	Motor Driver Pin
-18	IN1
-19	IN2
-22	IN3
-23	IN4
-5V	VCC
-GND	GND
-
-(Adjust ENA/ENB jumpers depending on your driver board – most modules keep them permanently enabled.)
 
 📦 Library Installation
 
