@@ -1,91 +1,139 @@
-# PS4 BLE Car Controller 🚗🎮
+ESP32 PS4 RC Car 🚗🎮
 
-This project allows you to control a car with a **PS4 controller** using an **ESP32** over Bluetooth (BLE).  
-It supports **forward, backward, left, and right movement**, and includes a configurable **dead-zone offset** for smoother control.
+Control an RC Car with an ESP32 using a PS4 (DualShock 4) controller over Bluetooth (BLE). This project is beginner-friendly and explains everything step-by-step, from library setup to pairing and coding.
 
----
+🔧 Hardware Requirements
 
-## ✨ Features
-- Connects PS4 Controller via BLE
-- Forward / Backward control with speed threshold
-- Left / Right steering
-- Dead-zone offset for fine-tuning sensitivity
-- Simple and lightweight Arduino code
+ESP32 Development Board (WROOM-32 or similar)
 
----
+L298N / L293D motor driver module
 
-## 🛠 Hardware Requirements
-- ESP32 Development Board (e.g., ESP32 WROOM-32)
-- Motor driver (e.g., L298N / L293D / BTS7960)
-- DC motors with wheels
-- PS4 Controller (DualShock 4)
+2x DC motors with wheels (or a 4-wheel chassis)
 
----
+PS4 (DualShock 4) wireless controller
 
-## 📂 Code Example
+Power supply (Li-ion battery / 9V battery pack)
 
-```cpp
-#include <PS4Controller.h>
+Jumper wires
 
-int offset = 4;  // adjustable offset value
+⚡ Wiring (ESP32 → Motor Driver)
+#define IN1 18   // Motor A forward
+#define IN2 19   // Motor A backward
+#define IN3 22   // Motor B forward
+#define IN4 23   // Motor B backward
 
-void loop() {
-    int speed = PS4.LStickY();  // Example for forward/backward
-    int turn  = PS4.LStickX();  // Example for left/right steering
+ESP32 Pin	Motor Driver Pin
+18	IN1
+19	IN2
+22	IN3
+23	IN4
+5V	VCC
+GND	GND
 
-    // Forward / Backward movement
-    if(speed > (20 - offset)) forward();
-    else if(speed < -(20 - offset)) backward();
+(Adjust ENA/ENB jumpers depending on your driver board – most modules keep them permanently enabled.)
 
-    // Left / Right steering
-    else if(turn > (20 - offset)) turnRight();
-    else if(turn < -(20 - offset)) turnLeft();
+📦 Library Installation
 
-    // Stop if inside dead zone
-    else stopCar();
+Download the ps4controller library (ps4controller.zip) from this repository.
+
+Open Arduino IDE → Sketch → Include Library → Add .ZIP Library.
+
+Select the downloaded ps4controller.zip.
+
+The library is now installed.
+
+🎮 PS4 Controller Setup (Pairing with ESP32)
+
+Get ESP32 MAC Address (Bluetooth)
+
+Upload the PS4_get_MAC.ino example (included in the ps4controller library).
+
+Open Serial Monitor → Note down the ESP32 Bluetooth MAC Address (e.g., 01:02:03:04:05:06).
+
+Pair PS4 Controller with ESP32
+
+Connect your PS4 controller to a PC (Windows/Linux) via USB.
+
+Use a tool like SixaxisPairTool (Windows) or sixpair (Linux).
+
+Enter the ESP32 MAC Address you copied earlier.
+
+Disconnect the USB.
+
+Connect wirelessly
+
+Press the PS button on the PS4 controller.
+
+The controller will now connect directly to your ESP32.
+
+🚀 Example Code (Minimal RC Car Control)
+#include <ps4controller.h>
+
+#define IN1 18
+#define IN2 19
+#define IN3 22
+#define IN4 23
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  Serial.begin(115200);
+  PS4.begin("01:02:03:04:05:06"); // Replace with your ESP32 MAC Address
+  Serial.println("Ready to connect PS4 controller...");
 }
 
+void loop() {
+  if (PS4.isConnected()) {
+    if (PS4.LStickY() < -50) {        // Forward
+      digitalWrite(IN1, HIGH);
+      digitalWrite(IN2, LOW);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+    } else if (PS4.LStickY() > 50) {  // Backward
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, LOW);
+      digitalWrite(IN4, HIGH);
+    } else if (PS4.LStickX() < -50) { // Left
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+    } else if (PS4.LStickX() > 50) {  // Right
+      digitalWrite(IN1, HIGH);
+      digitalWrite(IN2, LOW);
+      digitalWrite(IN3, LOW);
+      digitalWrite(IN4, HIGH);
+    } else {                          // Stop
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, LOW);
+      digitalWrite(IN3, LOW);
+      digitalWrite(IN4, LOW);
+    }
+  }
+}
 
-📚 Required Library
+📖 How It Works
 
-PS4-esp32 library
-👉 Download here
+ESP32 acts as a Bluetooth host and connects to the PS4 controller.
 
-To install:
+Joystick values (LStickX, LStickY) are read continuously.
 
-Open Arduino IDE
+Depending on stick movement → corresponding motor pins are set HIGH/LOW.
 
-Go to Sketch → Include Library → Add .ZIP Library
+Simple logic: Forward, Backward, Left, Right, Stop.
 
-Select the downloaded PS4-esp32 library zip file
+✅ Next Improvements
 
+Add PWM motor speed control.
 
-🚀 Getting Started
+Map buttons for headlights, horn, or extra features.
 
-Clone this repository:
+Use analog triggers (L2/R2) for speed throttle.
 
-git clone https://github.com/YOUR_USERNAME/ps4-ble-car-controller.git
+Upgrade to 4WD chassis with suspension.
 
-
-Open the ps4_car.ino file in Arduino IDE / PlatformIO
-
-Install the required library
-
-Upload code to ESP32
-
-Pair your PS4 controller by pressing PS + Share buttons together
-
-📄 License
-
-This project is licensed under the MIT License – see the LICENSE
- file for details.
-
-👨‍💻 Author
-
-Rajib Hasan
-Mechatronics & Embedded Systems Enthusiast
-
-
----
-
-👉 Would you like me to also add a **PlatformIO configuration (`platformio.ini`)** for easy build and 
+⚡ Enjoy your PS4 ESP32 RC Car Project! 🚗
