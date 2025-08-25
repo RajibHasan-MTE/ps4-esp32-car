@@ -34,37 +34,37 @@ GND	GND
 
 📦 Library Installation
 
-Download the ps4controller library (ps4controller.zip) from this repository.
+1. Download the ps4controller library (ps4controller.zip) from this repository.
 
-Open Arduino IDE → Sketch → Include Library → Add .ZIP Library.
+2. Open Arduino IDE → Sketch → Include Library → Add .ZIP Library.
 
-Select the downloaded ps4controller.zip.
+3. Select the downloaded ps4controller.zip.
 
-The library is now installed.
+4. The library is now installed.
 
 🎮 PS4 Controller Setup (Pairing with ESP32)
 
-Get ESP32 MAC Address (Bluetooth)
+1. Get ESP32 MAC Address (Bluetooth)
 
-Upload the PS4_get_MAC.ino example (included in the ps4controller library).
+- Upload the PS4_get_MAC.ino example (included in the ps4controller library).
 
-Open Serial Monitor → Note down the ESP32 Bluetooth MAC Address (e.g., 01:02:03:04:05:06).
+- Open Serial Monitor → Note down the ESP32 Bluetooth MAC Address (e.g., 01:02:03:04:05:06).
 
-Pair PS4 Controller with ESP32
+2. Pair PS4 Controller with ESP32
 
-Connect your PS4 controller to a PC (Windows/Linux) via USB.
+-Connect your PS4 controller to a PC (Windows/Linux) via USB.
 
-Use a tool like SixaxisPairTool (Windows) or sixpair (Linux).
+- Use a tool like SixaxisPairTool (Windows) or sixpair (Linux).
 
-Enter the ESP32 MAC Address you copied earlier.
+- Enter the ESP32 MAC Address you copied earlier.
 
-Disconnect the USB.
+- Disconnect the USB.
 
-Connect wirelessly
+3. Connect wirelessly
 
-Press the PS button on the PS4 controller.
+- Press the PS button on the PS4 controller.
 
-The controller will now connect directly to your ESP32.
+- The controller will now connect directly to your ESP32.
 
 🚀 Example Code (Minimal RC Car Control)
 #include <ps4controller.h>
