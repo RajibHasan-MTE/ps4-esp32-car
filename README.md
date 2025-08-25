@@ -3,6 +3,7 @@
 Control an **RC Car with an ESP32** using a **PS4 (DualShock 4) controller** over Bluetooth (BLE).  
 This project is beginner-friendly and explains everything step-by-step, from library setup to pairing and coding.
 
+<img src="imag-1.jpg" alt="ESP32 RC Car" width="400" height="300">
 ---
 
 ## 🔧 Hardware Requirements
