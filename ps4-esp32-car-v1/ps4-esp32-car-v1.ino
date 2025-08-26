@@ -3,8 +3,7 @@
 // Motor Pins (no ENA/ENB)
 #define IN1 18
 #define IN2 19
-#define IN3 22
-#define IN4 23
+#define IN3 22    
 int offset = 5;
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
