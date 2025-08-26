@@ -4,7 +4,9 @@
 #define IN1 18
 #define IN2 19
 #define IN3 22    
-int offset = 5;
+#define IN4 23
+int offset = 10;
+int threshold = 50;
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(115200);
@@ -26,40 +28,36 @@ void setup() {
 }
 
 void loop() {
-
   if(PS4.isConnected()){
     digitalWrite(LED_BUILTIN, HIGH);
-    int speed = PS4.LStickY();  // Forward/Backward
-    int turn  = PS4.LStickX();  // Left/Right
-    /*
-    // Forward / Backward
-    if(speed > 20) forward();
-    else if(speed < -20) backward();
-    // Left / Right steering
-    else if(turn > 20) turnRight();
-    else if(turn < -20) turnLeft();
-    else stopCar();
-    */
-    // Forward / Backward movement
-    if(speed > (20 - offset)) forward();
-    else if(speed < -(20 - offset)) backward();
 
-    // Left / Right steering
-    else if(turn > (20 - offset)) turnRight();
-    else if(turn < -(20 - offset)) turnLeft();
+    int speed = PS4.LStickY();
+    int turn  = PS4.LStickX();
+    Serial.print("Speed: ");
+    Serial.print(speed);
+    Serial.print("  trun: ");
+    Serial.println(turn);
 
-    // Stop if inside dead zone
+
+    if(abs(speed) < threshold) speed = 0;
+    if(abs(turn) < threshold) turn = 0;
+    
+    if(speed > threshold) forward();
+    else if(speed < -threshold) backward();
+    else if(turn > threshold) turnRight();
+    else if(turn < -threshold) turnLeft();
     else stopCar();
-  }
-  else{
+  } 
+  else {
     digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
+    Serial.println("PS4 Disconnected! Reconnecting...");
+    PS4.begin(); // Try to reconnect
+    delay(1000);
   }
 
-delay(5);
+  delay(5);
 }
+
 
 // Motor Control Functions
 void forward(){
