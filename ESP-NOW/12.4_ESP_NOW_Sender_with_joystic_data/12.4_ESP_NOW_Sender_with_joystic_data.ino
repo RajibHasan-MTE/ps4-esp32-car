@@ -8,9 +8,11 @@ typedef struct {
 } joystick_data;
 
 joystick_data jsData;
-
+//30:AE:A4:97:FD:C8
 // 🔹 Replace with your car ESP32's MAC address
-uint8_t carAddress[] = {0x24, 0x6F, 0x28, 0x94, 0xEF, 0x94};
+//uint8_t carAddress[] = {0x24, 0x6F, 0x28, 0x94, 0xEF, 0x94};
+
+uint8_t carAddress[] = {0x30, 0xAE, 0xA4, 0x97, 0xFD, 0xC8};
 
 void OnSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("Send Status: ");
