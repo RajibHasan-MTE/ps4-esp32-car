@@ -8,11 +8,10 @@ typedef struct {
 } joystick_data;
 
 joystick_data jsData;
-//30:AE:A4:97:FD:C8
+
 // 🔹 Replace with your car ESP32's MAC address
 uint8_t carAddress[] = {0xC0, 0x5D, 0x89, 0xAF, 0xD7, 0xD8};
-
-//uint8_t carAddress[] = {0x30, 0xAE, 0xA4, 0x97, 0xFD, 0xC8};
+// Example: uint8_t carAddress[] = {0x30, 0xAE, 0xA4, 0x97, 0xFD, 0xC8};
 
 void OnSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("Send Status: ");
@@ -22,10 +21,8 @@ void OnSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void setup() {
   Serial.begin(115200);
 
-  // Init WiFi as STA
   WiFi.mode(WIFI_STA);
 
-  // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
@@ -33,7 +30,6 @@ void setup() {
 
   esp_now_register_send_cb(OnSent);
 
-  // Register peer
   esp_now_peer_info_t peerInfo = {};
   memcpy(peerInfo.peer_addr, carAddress, 6);
   peerInfo.channel = 0;  
@@ -46,7 +42,7 @@ void setup() {
 }
 
 void loop() {
-  // Read joystick on safe ADC1 pins
+  // Read joystick from safe ADC1 pins (not used by WiFi)
   jsData.x = analogRead(34);  
   jsData.y = analogRead(35);
 
