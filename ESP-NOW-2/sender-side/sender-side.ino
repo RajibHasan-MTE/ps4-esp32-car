@@ -43,11 +43,16 @@ void setup() {
 
 void loop() {
   // Read joystick from safe ADC1 pins (not used by WiFi)
-  jsData.x = analogRead(34);  
-  jsData.y = analogRead(35);
+  jsData.x = map(analogRead(35), 0, 4000, 0, 255);  
+  jsData.y = map(analogRead(34), 0, 4000, 0, 255);
 
   // Send joystick data
   esp_now_send(carAddress, (uint8_t *) &jsData, sizeof(jsData));
+  Serial.print("Y:");
+  Serial.print(jsData.y);
+  Serial.print(" X:");
+  Serial.print(jsData.x);
+  Serial.println();
 
   delay(50); // send every 50ms
 }

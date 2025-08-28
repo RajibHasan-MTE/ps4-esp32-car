@@ -1,7 +1,7 @@
 #include <esp_now.h>
 #include <WiFi.h>
 
-// Motor pins
+// Motor pinsv 
 #define IN1 18
 #define IN2 19
 #define IN3 22
@@ -68,6 +68,12 @@ void setup() {
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
 
+  while(1){
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+  }
   WiFi.mode(WIFI_STA);
 
   if (esp_now_init() != ESP_OK) {
