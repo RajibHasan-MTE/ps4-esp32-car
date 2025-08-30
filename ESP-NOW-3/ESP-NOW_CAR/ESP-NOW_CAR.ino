@@ -12,11 +12,11 @@
 #define ENB 26   // Right motor enable
 
 int speed = 0;
-int center = 90;     // midpoint for 12-bit ADC
-int deadzone = 20;    // joystick tolerance
+int center = 95;     // midpoint for 12-bit ADC
+int deadzone = 50;    // joystick tolerance
 
-int centerX = 90;  // joystick center X
-int centerY = 90;  // joystick center Y
+int centerX = center;  // joystick center X
+int centerY = center;  // joystick center Y
 int maxVal = 235;  // joystick max
 int minVal = 0;    // joystick min
 
@@ -86,22 +86,26 @@ void moveCar(int x, int y) {
   if (y > center + deadzone) { 
     // Forward
     speed = map(jsData.y, centerY, maxVal, 0, 255);  // Forward
+    if(speed > 255) speed = 255;
     forward(speed);
   } 
   else if (y < center - deadzone) { 
     // Backward
     speed = map(jsData.y, centerY, minVal, 0, 255);  // Backward
+    if(speed > 255) speed = 255;
     backward(speed);
   }
 
   else if (x > center + deadzone) { 
     // Right turn
     speed = map(jsData.x, centerX, maxVal, 0, 130);  // Right
+    if(speed > 255) speed = 255;
     turn_right(speed);
   } 
   else if (x < center - deadzone) { 
     // Left turn
     speed = map(jsData.x, centerX, minVal, 0, 130);  // Left
+    if(speed > 255) speed = 255;
     turn_left(speed);
   } 
 

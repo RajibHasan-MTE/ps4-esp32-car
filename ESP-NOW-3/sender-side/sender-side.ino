@@ -1,0 +1,58 @@
+#include <esp_now.h>
+#include <WiFi.h>
+
+// Structure to send joystick values
+typedef struct {
+  int x;
+  int y;
+} joystick_data;
+
+joystick_data jsData;
+
+// 🔹 Replace with your car ESP32's MAC address
+uint8_t carAddress[] = {0xC0, 0x5D, 0x89, 0xAF, 0xD7, 0xD8};
+// Example: uint8_t carAddress[] = {0x30, 0xAE, 0xA4, 0x97, 0xFD, 0xC8};
+
+void OnSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+  Serial.print("Send Status: ");
+  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  WiFi.mode(WIFI_STA);
+
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  esp_now_register_send_cb(OnSent);
+
+  esp_now_peer_info_t peerInfo = {};
+  memcpy(peerInfo.peer_addr, carAddress, 6);
+  peerInfo.channel = 0;  
+  peerInfo.encrypt = false;
+
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("Failed to add peer");
+    return;
+  }
+}
+
+void loop() {
+  // Read joystick from safe ADC1 pins (not used by WiFi)
+  jsData.x = map(analogRead(35), 0, 4000, 0, 255);  
+  jsData.y = map(analogRead(34), 0, 4000, 0, 255);
+
+  // Send joystick data
+  esp_now_send(carAddress, (uint8_t *) &jsData, sizeof(jsData));
+  Serial.print("Y:");
+  Serial.print(jsData.y);
+  Serial.print(" X:");
+  Serial.print(jsData.x);
+  Serial.println();
+
+  delay(50); // send every 50ms
+}
